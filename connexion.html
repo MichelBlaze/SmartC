@@ -1,0 +1,150 @@
+
+
+<html>
+   <head>
+
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="/css/style.css">
+    <link id = "BGstyle" rel="stylesheet" href="/css/interfaceDesign.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="/js/Plugins/jquery.min.js"></script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+	
+	<link rel="stylesheet" href="css/dropdown.css">
+
+    <script src="https://code.jquery.com/pep/0.4.1/pep.js"></script>
+
+
+      <title>Authentification</title>
+      <meta charset="utf-8">
+	  
+	      <script>
+var login_user = "";
+	function Connection()
+{
+	
+
+	 var type=$("#type").val();
+    
+	 $.ajax
+      ({
+        url: '/user_login',
+        type: 'POST',
+        data: {
+			   'type': type
+          },
+        dataType: "text",
+        success: function(strMessage) {
+            console.log(strMessage);
+            login_user = strMessage;
+            if(strMessage=="Asta")
+            {
+                //load the file for asta user
+                window.location.href='/vista'; 
+           //   window.location.href='/testVersion';
+              sessionStorage.setItem('status','Tester') 
+              
+            }
+            else if (strMessage=="smartC")
+            {
+                // load the file for SmartC
+              window.location.href='/SmartC';
+            }
+            else if(strMessage=="developper")
+            {
+              window.location.href='/devVersion'; 
+              sessionStorage.setItem('status','Developer') 
+            }
+        }
+      });
+}
+    </script>
+	  
+	  
+	  
+   </head>
+   
+<body style =" background: #131c25;">
+      
+  <div class="modal" style="display: block;">
+    <!-- Modal content -->
+    <div class="modal-content">
+            <div id="individualtipsPane">
+                    <div style="display:flex; flex-direction:row;">
+                                    <p  class="alllabels" style="line-height: 28px; text-align: center; margin: auto;">Welcome to Vista!</p>
+                            </div>
+                    <!-- Save Test Scenario Panel -->
+                    <div id = "SavingTestScenarios" style="height: 200px;">
+                            <div class="insidecontainerConsole" style="overflow:wrap;">    
+                                   
+                                    <div style="margin: 35px auto; padding:0 auto; align-content:center; display:flex; flex-direction: row;"> 
+                                       	
+                                          <p class="alllabels">Please tell us if you are</p>
+                                            <div class="dropdown dropdown-dark" style="background-color: #464d56;   border: 1px solid #3d434b; width: 200px; color:white;">
+                                              <select name="type" id="type" class="dropdown-select" style="margin: 0 auto; color:white;">
+                                                <option value="">Select One</option>
+                                                <option value="Asta">I work at AstaZero</option>
+                                                <option value="smartC">I am working on the SmartC Project</option>
+                                                <option value="developper">I am a Vista developer</option>
+                                              </select>
+                                            </div>
+                                  </div> 
+                                  <form method="POST" style="margin: 35px auto; padding:0 auto; align-content:center; display:flex; flex-direction: row;">
+                                    <input class="allbuttons" type="button" onclick="Connection();"name="formconnexion" value="Enter" style="margin: 15px auto; width: 300px;"/>
+                                  </form>
+                            </div> 
+                    </div> 
+                  
+            </div> 
+    </div> 
+</div>
+
+<!--
+        <button type="button" onclick="document.getElementById('id01').style.display='block'" class="allbuttons saveLoadTestScenariosBtn" id="">Login</button>
+		<button type="button" onclick="document.getElementById('id02').style.display='block'" class="allbuttons saveLoadTestScenariosBtn" id="">Create Account</button>
+       
+	  
+	  
+   <div id="id01" class="w3-modal">
+    <div class="w3-modal-content w3-animate-zoom">
+      <header class="w3-container w3-teal"> 
+        <span onclick="document.getElementById('id01').style.display='none'" 
+        class="w3-button w3-display-topright">&times;</span>
+        <h2>Please select the type of Users :</h2>
+      </header>
+      <div class="w3-container">
+    
+	
+         <br /><br />
+         <form method="POST" >	
+    <div class="dropdown dropdown-dark">
+      <select name="type" id="type" class="dropdown-select">
+        <option value="">Select…</option>
+        <option value="smartC">Smart City</option>
+        <option value="Asta">AstaSmoker</option>
+        <option value="developper">Developper</option>
+      </select>
+    </div>
+
+ </br><input type="button" onclick="Connection();"name="formconnexion" value="Change my type" /></br>
+
+			
+         </form>
+	
+	
+	
+	
+      </div>
+      <footer class="w3-container w3-teal">
+  <button onclick="window.location.href='/SmartC'">GO to application</button>
+      </footer>
+    </div>
+  </div>
+-->
+
+</body>
+</html>

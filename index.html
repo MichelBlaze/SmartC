@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+<head>
+        
+    <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
+
+    <script src="https://preview.babylonjs.com/babylon.js"></script>
+    <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
+    <!-- Link to the last version of BabylonJS loaders to enable loading filetypes such as .gltf -->
+    <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+    <!-- Link to pep.js to ensure pointer events work consistently in all browsers -->
+    <script src="https://code.jquery.com/pep/0.4.1/pep.js"></script>
+
+    <!-- Stylesheets for interface design -->
+    <link rel="stylesheet" href="/css/style.css">
+    <link id = "BGstyle" rel="stylesheet" href="/css/interfaceDesign.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/js/Plugins/codemirror/lib/codemirror.css">
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="/js/Plugins/jquery.min.js"></script>
+ <!--Window Title-->
+    <title>Vista</title>
+</head>
+<body>
+    <script src="/js/babylon.custom.js"></script>
+    <script src="/js/Plugins/mresize.js"></script>
+    <script src="/js/Plugins/codemirror/lib/codemirror.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="/js/Plugins/FileSaver.js"></script>
+    <script type="text/javascript" src="/js/Parser/underscore-min.js"></script>
+
+    <script src="/js/sceneCreate.js"></script>
+    <script src="/js/sceneExecute.js"></script>
+    <script src="/js/paths.js"></script>
+    <script src="/js/Car.js"></script>
+    <script src="/js/helpMenu.js"></script>
+    <script src="/js/resources.js"></script>
+    <script src="/js/Parser/parser.js"></script>
+    <script src="/js/Parser/interpreter.js"></script>
+    <script src="/js/testScenarios.js"></script>
+<!--
+    <script>
+            //Load relevant files...
+            window.addEventListener('DOMContentLoaded', function(){   
+                if (sessionStorage.getItem('status') == null){
+                //go to login page...
+                        var request = new XMLHttpRequest();
+                        request.open('POST', '/logout', true);
+                        request.send();
+                }
+                else if(sessionStorage.getItem('status') == "Tester"){
+                //show validation message
+                        var srcs = [];
+                        srcs[0] = ("/js/sceneCreate.js");
+                        srcs[1] = "/js/sceneExecute.js";
+                        srcs[2] = "/js/Parser/interpreter.js";
+                        srcs[3] = "/js/Parser/parser.js";
+                        srcs[4] = "/js/resources.js";
+                        srcs[5] = "/js/helpMenu.js";
+                        srcs[6] = "/js/Car.js";
+                        srcs[7] = "/js/paths.js";
+                        srcs[8] = "/js/testScenarios.js";
+                      
+                        var head = document.getElementsByTagName('body')[0];
+                        srcs.forEach(filename => {
+                                console.log("tester", filename);
+                                var s,r,t;
+                                r = false;
+                                s = document.createElement('script');
+                                s.type = 'text/javascript';
+                                s.src = filename;
+                                s.onload = s.onreadystatechange = function() {
+                                //console.log( this.readyState ); //uncomment this line to see which ready states are called.
+                                        if ( !r && (!this.readyState || this.readyState == 'complete') )
+                                        {
+                                                r = true;
+                                             //   if(filename == "/js/sceneExecute.js")
+                                                    //    loadAll();
+                                              //  callback();
+                                        }
+                                };
+                             //   t = document.getElementsByTagName('script')[0];
+                              //  t.parentNode.insertBefore(s, t);
+                              head.appendChild(s);
+
+                        });
+                }else if(sessionStorage.getItem('status') == "Developer"){
+                //show validation message
+                        var srcs = [];
+                        srcs.push("/js/paths.js");
+                        srcs.push("/js/Car.js");
+                        srcs.push("/js/helpMenu.js");
+                        srcs.push("/js/resources.js");
+                        srcs.push("/js/Parser/parser.js");
+                        srcs.push("/js/Parser/interpreter.js");
+
+                        var head = document.getElementsByTagName('head')[0];
+                        var script = document.createElement('script');
+                        script.type = 'text/javascript';
+                        srcs.forEach(filename => {
+                                script.src = filename;
+                                head.addChild(script);
+                        });
+                }
+
+            });
+    </script>-->
+
+    <!--Upward increasing Panels-->
+        <script>
+                function include(filename)
+                {
+                        var head = document.getElementsByTagName('head')[0];
+
+                        var script = document.createElement('script');
+                        script.src = filename;
+                        script.type = 'text/javascript';
+
+                        head.appendChild(script)
+                }  
+
+                window.onresize = function(event) {
+                        myFunction() ;
+                      //  consoleResize();
+                     
+
+                };
+
+                function myFunction() {
+                        var divHeight = $('.middlePanel').height(); 
+                        var removeHeight =  $('.middlePane').height() +  $('.simulationPane').height();
+                        $('.bottomPane').height (divHeight - removeHeight - 11); 
+                }
+               /* function consoleResize() {
+                        if($( "#codingArea").parent().get(0) != document.getElementById("wrapper")){
+                                $( "#consolePane").width ($( ".bottomPane").width() -  $( ".codingArea" ).width());
+                        }
+                }*/
+        </script>
+
+    <!--Resizeable Panels-->
+    <script>
+            //Disable shortcut keys for pge zooming
+        $(document).ready(function(){
+                var pressedone = '';
+                $(document).keyup(function(event) {
+                        pressedone = '';
+                });
+                $(document).keydown(function(event) {
+                        if(!(pressedone =='224' || pressedone=='17'  || pressedone == '91' || pressedone =='93')){
+                        //if previously command key was pressed no key can override it
+                        //until command key in released
+                                pressedone = event.which;
+                        }
+                        if (event.ctrlKey==true && (event.which == '61' || event.which == '107' || event.which == '173' || event.which == '109'  || event.which == '187'  || event.which == '189'  ) ) {
+                                event.preventDefault();
+                        }
+                        if ((pressedone =='224' || pressedone=='17'  || pressedone == '91' || pressedone =='93')
+                        && (event.which == '61' || event.which == '107' || event.which == '173' || event.which == '109'  || event.which == '187'  || event.which == '189'  ) ) {
+                                pressedone = '';
+                                event.preventDefault();
+                        }
+                
+                });
+        });
+
+       $( function() {
+            $( "#leftPanel" ).resizable
+                ({
+                    handles: "e",
+                    minWidth: 500,
+                    create: function( event, ui ) {
+            // Prefers an another cursor with two arrows
+            $(".ui-resizable-e").css("cursor","ew-resize");
+            myFunction();
+                }
+                });
+        } );
+        $( function() {
+          /*  $( "#codingArea" ).resizable
+                ({
+                    handles: "e",
+                    minWidth: 200,
+                   create: function( event, ui ) {
+            // Prefers an another cursor with two arrows
+            $(".ui-resizable-e").css("cursor","ew-resize");
+            consoleResize();
+          
+          //  $( ".consoleArea").width ( $( ".bottomPane").width() -  $( ".codingArea" ).width());
+          
+                }
+                
+                });*/
+        } );
+
+    </script>
+
+        <!--Exapnding Panels
+        <script>
+                function expand(param){
+                        param.classList.toggle("active");
+                        var content = param.nextElementSibling;
+                        if (content.style.display === "block") {
+                        content.style.display = "none";
+                        } else {
+                        content.style.display = "block";
+                        }
+                }
+        </script>-->
+        <script>
+        function openView(evt, viewName) {
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                  tabcontent[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                  tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                document.getElementById(viewName).style.display = "block";
+                evt.currentTarget.className += " active";
+              }
+        </script>
+        <!-- Top bar mutually exclusive Drop down Menus-->
+        <script>
+                $(document).ready(function(){
+                        // Show hide popover
+                        $(".dropdown").click(function(){
+                                var $trigger = $(".dropdown");
+                                if($trigger !== event.target && $trigger.has(event.target).length){
+                                       
+                                        $(this).parent().find(".dropdown").not($(this)).find(".dropdown-content").slideUp("fast");
+                                       
+                                } 
+                               $(this).find(".dropdown-content").slideToggle("fast");
+                             
+                        });
+                });
+                $(document).on("click", function(event){
+                        var $trigger = $(".dropdown");
+                        if($trigger !== event.target && !$trigger.has(event.target).length){
+                                $(".dropdown-content").slideUp("fast");
+                        }          
+                });
+                $(".dropdown").hover(function(){
+                      
+                        var $trigger = $(".dropdown");
+                                if($trigger !== event.target && $trigger.has(event.target).length){
+                                       
+                                        $(this).parent().find(".dropdown").not($(this)).find(".dropdown-content").slideUp("fast");
+                                       
+                                } 
+                });
+        </script>
+
+     <!--=========================== HTML Body ==========================-->
+
+ <!--  Top Bar Panel  -->
+    <div id="TitlePanel">
+        <div id="topPanel" class="topPanel">
+                <p class="titlelabel">Vista Scenario Builder</p>
+                <div id = "topMenu" style="margin-left:15px;">
+                      <!--  <button id = "about" class="dropbtn">Help</button>    --> 
+                      <li class="dropdown">
+                                <a class="dropbtn" >File</a>
+                                <ul class="dropdown-content">
+                                        <li><a id = "NewTest" class="allbuttons saveLoadTestScenariosBtn">New</a></li>
+                                        <li><a class="allbuttons saveLoadTestScenariosBtn" onclick="saveTestScenario()">Save</a></li>
+                                        <li><a id = "loadAllTestsFromCloud" class="allbuttons saveLoadTestScenariosBtn" onclick="openTestScenario()">Open</a></li>         
+                                </ul>
+                        </li>    
+                         <li class="dropdown">
+                                <a class="dropbtn">View</a>
+                                <ul class="dropdown-content">
+                                        <li><a id = "lineNumbers" class="allbuttons saveLoadTestScenariosBtn">Line Numbers</a></li>
+                                </ul>
+                         </li> 
+                        <li class="dropdown">
+                                <a class="dropbtn" >Help</a>
+                                <ul class="dropdown-content">
+                                        <li><a id = "referenceManual" class="allbuttons saveLoadTestScenariosBtn" onclick="openReferenceMaual()" style="text-overflow: ellipsis; white-space: nowrap;">Reference Manual</a></li>
+                                        <li><a id = "About" class="allbuttons saveLoadTestScenariosBtn" onclick="openAbout()">About</a></li>
+                                        <li><a id = "Tips" class="allbuttons saveLoadTestScenariosBtn" onclick="openTips(); return false;">Tips</a></li>
+                                        <li><a id = "License" class="allbuttons saveLoadTestScenariosBtn" onclick="openLicense()">License</a></li>
+                                </ul>
+                        </li>   
+
+                        <li class="dropdown">
+                                <a class="dropbtn" href="/logout" >Logout</a>
+                        </li>      
+                    
+                </div> 
+
+        </div>  
+     </div>   
+   
+
+
+    <div id="wrapper">
+        <!------- Left Panel -------->
+        <div id="leftPanel" class="leftPanel" onresize="myFunction()">
+                <div class="bloc-header">
+                         <div id = "leftInner" class="leftInner">
+                                        <p class="alllabels">Test Scenario</p>
+                                        <div class="tab">
+                                                        <button id="viewGraphicalEditor" class="tablinks active"  style="width: 50%;" >Graphical View</button>
+                                                        <button id="viewCode" class="tablinks"  style="width: 50%; border-right: none;">Textual View</button>
+                                        </div>
+
+                                                <div id = "graphicalDiv" class="tabcontent" style="display:block;" >
+                                                                <div id = "instantiateElements" class="instantiateElements" >
+                                                                                <button id = "newPathButton" class="allbuttons toolBarButtons newPathButton" title="New Path"></button>
+                                                                                <button id = "newCarButton" class="allbuttons  toolBarButtons newCarButton" title="New Car"></button>
+                                                                                <button id = "actionsButton" class="allbuttons  toolBarButtons actionsButton" title="Actions"></button>
+                                                                        </div>
+                                                                        <div id = "treelistArea" class="treelistArea" >
+                                                                                <!-- ----- Tree hierarchy Panel -------->
+                                                                                <ul id="myUL" class="myUL" style="margin-left: -40px;">
+                                                                                </ul>
+                                                                        </div>
+        
+                                                </div>
+                                                <div id = "codingDiv" class="tabcontent"  style="display:none;">
+                                                                <div id = "instantiateElements" class="instantiateElements" >
+                                                                                <p id = "testFileName" class="alllabels" style="margin-bottom: 8px; padding-top: 6px;" >Untitled-Script</p>
+                                                                </div>
+                                                                <textarea id = "myCodeArea" ></textarea>
+                                                </div>
+                                       
+                        </div>
+                </div>
+        </div>
+       <!---------------->
+        <!------- Middle Panel -------->
+        <div id="middlePanel" class="middlePanel">
+                 <!--Pane For canvas-->     
+                <div id="middlePane" class="middlePane">
+                                <p class="alllabels" style="margin-bottom: 8px; padding-top: 6px;">Simulation View</p> 
+                                <div class="insidecontainerCanvas">
+                                 <canvas id="renderCanvas"> </canvas>
+                           
+                        </div>  
+                </div>
+                <!--Pane For Simulation Controls-->
+                <div id="simulationPane" class="simulationPane">
+                        <!--p class="alllabels">Simulation</p-->
+                        <div class="insidecontainerSimulation">                
+                                <button id = "startSimulation" class="allbuttons startSimButton" title="Run Simulation"></button>
+                                <button id = "stopSimulation" class="allbuttons stopSimButton" title="Stop Simulation"></button>
+                                <input type="range" min="0" max="100" value="0" class="slider" id="timeline" step="1" name = "timeline">
+                                <label for="timeline" id = "time" class="wwwpinformation" style=" max-width: 120px; min-width: 120px;" >Time: </label>
+                               
+                        </div>
+                </div>
+        <!--Pane For Code Area and Console-->
+                <div id="bottomPane" class="bottomPane" >
+                        <!--Console Pane--
+                        <div id = "codingArea2" class="codingArea">
+                              !--    <div style="display:flex;"> --
+                                        <p id = "testFileName" class="alllabels" style="margin-bottom: 8px; padding-top: 6px;" >Untitled-Script</p>
+                                        
+                                           <div id = "instantiateElements" class="instantiateElements" >
+                                               <button id = "runcode" class="allbuttons toolBarButtons runCodeBtn" title="Run Simulation"></button>
+                                                <button id = "windowResize" class="allbuttons toolBarButtons maxWindowBtn" title="maximize window" style="margin-left: auto; margin-right: 3px;"></button>
+                                        </div>
+                                <textarea id = "myCodeArea" ></textarea>
+                        </div> -->
+                          <!--Tips Pane -->
+                        <div id="consolePane">
+                                <p class="alllabels" style="margin-bottom: 8px; padding-top: 6px;">Console</p>
+                                <div id="consoleLogArea" class="insidecontainerConsole"></div>  
+                        </div>
+                </div>   
+        </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+    <!-- Save/Load Test Scenario Panel -->
+        <div id="myModal" class="modal">
+                <!-- Modal content -->
+                <div class="modal-content">
+                        <div id="individualtipsPane">
+                                <div style="display:flex; flex-direction:row;">
+                                                <p id= "LabelForPane" class="alllabels"></p>
+                                                <button class="allbuttons" onclick=closeTestScenario() style="width: 38px; height: 38px; margin: 2px; position: absolute; right: 0px; font-size: 25px;">X</button>
+                                        </div>
+                                <!-- Save Test Scenario Panel -->
+                                <div id = "SavingTestScenarios" style="height: 200px;">
+                                        <div class="insidecontainerConsole">    
+                                                <p class="alllabels" style="align-content: center;" >Do you want to save this test scenario?</p>
+                                                <div style="margin:15px 15px; display: flex;">  
+                                                        <p class="speedinformation">Export As: </p>
+                                                        <input id = "TestName" class="names testscenariosnames dropdownoption" type='text' style="width: 200px; margin-left: 4px; text-align: left;" value="testscenario">
+                                                        <li class="dropdown dropdownoption" style="width: 100px; margin-left: 4px; ">
+                                                                <a style="margin-top: auto; margin-bottom: 0px;  padding: 3px;  color: white; text-decoration: none;">Save</a>
+                                                                <ul class="dropdown-content" style="max-width: 100px; min-width: 100px; width: 100px;">
+                                                                        <li class="dropdownoption"  onclick=closeTestScenario() style="width: 100px;"><a id = "saveLocal" style="padding: 3px;">Save on Disk</a></li>
+                                                                        <li class="dropdownoption" onclick=closeTestScenario() style="width: 100px;"><a id = "saveDatabase" style="padding: 3px;">Save on Cloud</a></li>
+                                                                </ul>
+                                                        </li>   
+                                                </div> 
+                                        </div> 
+                                </div> 
+                                 <!-- Load Test Scenario Panel -->
+                                <div id = "LoadingTestScenarios" >
+                                        <div class="insidecontainerConsole">    
+                                                <div  style=" background-color: #464d56; border: 1px solid #3d434b;  height : 40px; margin: 4px; width: 100px;   padding: 7px; display: block;"> 
+                                                        <input id = "OpenTest" class="custom-file-input saveLoadTestScenariosBtn" style="text-align: center;" type='file' accept='.json' onclick=closeTestScenario() >
+                                                </div>
+                                                <div class="insidecontainerConsole" style=" max-height: 138px; ">
+                                                        <div id="listOfFiles">  
+                                                                <!-- Here will load list of test scenarios saved on database -->
+                                                        </div> 
+                                                        <p class= 'wpinformation' id="databaseNotification"></p>
+                                                </div>
+                                        </div>
+                                </div>
+                                 <!--License Pane-->
+                                 <div id = "LicensePane" >
+                                        <div class="insidecontainerConsole">    
+                                                <p class="alllabels">...</p>
+                                        </div>  
+                                </div>
+                                 <!--About Pane-->
+                                 <div id = "AboutPane" >
+                                        <div class="insidecontainerConsole">    
+                                                <p class="alllabels">...</p>
+                                        </div> 
+                                 </div>
+                                  <!--Tips Pane-->
+                                  <div id = "TipsPane" >
+                                        <div class="insidecontainerConsole">     
+                                                        <!--here will go tips and help details...-->
+                                                        <ul class="tipsinformation" >
+                                                                <li>Press on "New Trajectory" button to create a Trajectory</li>
+                                                                <li>Create waypoints on path by clicking on path and press "Escape" to stop or double click</li>
+                                                                <li>Press Play button to play the simulation</li>
+                                                                <li>Coordinates of waypoint and speed values can be edited from
+                                                                        <ul>
+                                                                                <li>Under the trajectories details in "Test Scenario" pane.</li>
+                                                                                <li>By double clicking the waypoint itself, comma seperated values are accepted as waypoint details and colon seperated value is accepted for start time and speed</li>
+                                                                        </ul>
+                                                                </li>
+                                                                <li>Test Scenarios can be saved from File menu. File > Save</li>
+                                                                <li>Saved test scenarios can be loaded from File menu. File > Open</li>
+                                                                <li>New blank scenario can be created from File menu. File > New</li>
+                                                        </ul>  
+                                        </div> 
+                                </div>
+                        </div> 
+                </div> 
+        </div>
+      
+</body>
+</html>

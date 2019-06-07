@@ -1,0 +1,722 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+       
+
+
+
+    <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+    <script src="https://preview.babylonjs.com/babylon.js"></script>
+
+    <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
+    <!-- Link to the last version of BabylonJS loaders to enable loading filetypes such as .gltf -->
+    <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+    <!-- Link to pep.js to ensure pointer events work consistently in all browsers -->
+    <script src="https://code.jquery.com/pep/0.4.1/pep.js"></script>
+
+    <!-- Stylesheets for interface design -->
+    <link rel="stylesheet" href="css/style.css">
+    <link id = "BGstyle" rel="stylesheet" href="css/interfaceDesign.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="js/Plugins/codemirror/lib/codemirror.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	
+		   <script src="js/Plugins/jquery.min.js"></script>
+		   
+		   <script>
+		   
+		   function load_user()
+		{
+		     var ajax = new XMLHttpRequest(); // Ajax syntax for GET request
+    ajax.open("GET", "/load_user", true);
+    ajax.send();
+
+    ajax.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            
+            console.log(data);	 
+
+        }
+    };  
+		
+		  
+		}
+		   
+		   
+		   
+		   
+		   
+		   </script>
+		   
+		   
+	<script src="js/Scenario_Builder.js"></script>
+	
+
+    <title>SmartCity : Web-Scenario builder</title>
+</head>
+<body onload="javascript:load_user();">
+
+
+</div>
+
+    <script src="js/resources.js"></script>
+    <script src="js/Plugins/mresize.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="js/babylon.custom.js"></script>
+    <script src="js/Plugins/codemirror/lib/codemirror.js"></script>
+
+        <script>
+		
+                window.onresize = function(event) {
+                        myFunction() 
+                };
+
+                function myFunction() {
+                        var divHeight = $('.middlePanel').height(); 
+                        var removeHeight =  $('.middlePane').height() +  $('.simulationPane').height();
+                        $('.bottomPane').height (divHeight - removeHeight - 11); 
+
+                        $( ".consoleArea").width ( $( ".bottomPane").width() -  $( ".codingArea" ).width());
+
+                }
+        </script>
+
+    <!--Resizeable Panels-->
+    <script>
+            //Disable shortcut keys for pge zooming
+        $(document).ready(function(){
+		
+		
+		
+		
+		
+                var pressedone = '';
+                $(document).keyup(function(event) {
+                        pressedone = '';
+                });
+                $(document).keydown(function(event) {
+                        if(!(pressedone =='224' || pressedone=='17'  || pressedone == '91' || pressedone =='93')){
+                        //if previously command key was pressed no key can override it
+                        //until command key in released
+                                pressedone = event.which;
+                        }
+                        if (event.ctrlKey==true && (event.which == '61' || event.which == '107' || event.which == '173' || event.which == '109'  || event.which == '187'  || event.which == '189'  ) ) {
+                                event.preventDefault();
+                        }
+                        if ((pressedone =='224' || pressedone=='17'  || pressedone == '91' || pressedone =='93')
+                        && (event.which == '61' || event.which == '107' || event.which == '173' || event.which == '109'  || event.which == '187'  || event.which == '189'  ) ) {
+                                pressedone = '';
+                                event.preventDefault();
+                        }
+                
+                });
+
+        });
+
+       $( function() {
+            $( "#leftPanel" ).resizable
+                ({
+                    handles: "e",
+                    minWidth: 500,
+                    create: function( event, ui ) {
+            // Prefers an another cursor with two arrows
+            $(".ui-resizable-e").css("cursor","ew-resize");
+            myFunction();
+                }
+                });
+        } );
+        $( function() {
+            $( "#codingArea" ).resizable
+                ({
+                    handles: "e",
+                    minWidth: 200,
+                   create: function( event, ui ) {
+            // Prefers an another cursor with two arrows
+            $(".ui-resizable-e").css("cursor","ew-resize");
+          //  myFunction();
+          console.log($( ".bottomPane").width() , $( ".codingArea" ).width());
+          $( ".consoleArea").width ( $( ".bottomPane").width() -  $( ".codingArea" ).width());
+                }
+                
+                });
+        } );
+
+
+
+
+
+
+
+
+
+    </script>
+        <script>
+		
+                function expand(param){
+                        param.classList.toggle("active");
+                        var content = param.nextElementSibling;
+                        if (content.style.display === "block") {
+                        content.style.display = "none";
+                        } else {
+                        content.style.display = "block";
+                        }
+                }
+        </script>
+        <script>
+                $(document).ready(function(){
+                        // Show hide popover
+                        $(".dropdown").click(function(){
+                                var $trigger = $(".dropdown");
+                                if($trigger !== event.target && $trigger.has(event.target).length){
+                                       
+                                        $(this).parent().find(".dropdown").not($(this)).find(".dropdown-content").slideUp("fast");
+                                       
+                                } 
+                               $(this).find(".dropdown-content").slideToggle("fast");
+                             
+                        });
+                });
+                $(document).on("click", function(event){
+                        var $trigger = $(".dropdown");
+                        if($trigger !== event.target && !$trigger.has(event.target).length){
+                                $(".dropdown-content").slideUp("fast");
+                        }          
+                });
+                $(".dropdown").hover(function(){
+                        var $trigger = $(".dropdown");
+                                if($trigger !== event.target && $trigger.has(event.target).length){
+                                       
+                                        $(this).parent().find(".dropdown").not($(this)).find(".dropdown-content").slideUp("fast");
+                                       
+                                } 
+                });
+				
+					
+        </script>
+     <!--=========================== HTML Body ==========================-->
+    <div id="TitlePanel">
+        <div id="topPanel" class="topPanel">
+                <p class="titlelabel">SmartCity Web-Scenario builder</p>
+                <div style="margin-left:15px;">
+                      <!--  <button id = "about" class="dropbtn">Help</button>    --> 
+                      <li class="dropdown">
+                                <a class="dropbtn" >Files</a>
+                                <ul class="dropdown-content">
+								<button type="button" onclick="document.getElementById('id02').style.display='block'" class="allbuttons saveLoadTestScenariosBtn" id="ground">New File</button>
+                                <li><a class="allbuttons saveLoadTestScenariosBtn" onclick="All_Send_To_Database();">Save</a></li>
+                                <li><a class="allbuttons saveLoadTestScenariosBtn" onclick="Load_Scene_From_Database(scene,canvas,engine);">Load</a></li>
+
+                                </ul>
+                        </li>    
+                         <li class="dropdown">
+                                <a class="dropbtn">View</a>
+                                <ul class="dropdown-content">
+                                <li><a id = "lineNumbers" class="allbuttons saveLoadTestScenariosBtn">Line Numbers</a></li>
+								<li><a id = "axis" onclick="showAxis(5);" class="allbuttons saveLoadTestScenariosBtn">Axis</a></li>
+								<li><a id = "axis" onclick="Activate_Sky(scene,canvas,engine);" class="allbuttons saveLoadTestScenariosBtn">Activate Sky</a></li>
+								<li><a id = "axis" onclick="Activate_Fog(scene,canvas,engine);" class="allbuttons saveLoadTestScenariosBtn">Activate Fog</a></li>
+								<li><a id = "axis" onclick="Top_View(camera);" class="allbuttons saveLoadTestScenariosBtn">Top View</a></li>
+								<li><a id = "axis" onclick="document.getElementById('id01').style.display='block'" class="allbuttons saveLoadTestScenariosBtn">Show Scene</a></li>
+						
+                                </ul>
+                         </li> 
+                        <li class="dropdown">
+                                <a class="dropbtn" >Help</a>
+                                <ul class="dropdown-content">
+                                        <li><a id = "referenceManual" class="allbuttons saveLoadTestScenariosBtn" onclick="openReferenceMaual()" style="text-overflow: ellipsis; white-space: nowrap;">Reference Manual</a></li>
+                                        <li><a id = "About" class="allbuttons saveLoadTestScenariosBtn" onclick="openAbout()">About</a></li>
+                                        <li><a id = "Tips" class="allbuttons saveLoadTestScenariosBtn" onclick="openTips(); return false;">Tips</a></li>
+                                        <li><a id = "License" class="allbuttons saveLoadTestScenariosBtn" onclick="openLicense()">License</a></li>
+                                </ul>
+                        </li>
+						
+						                       <li class="dropdown">
+                                <a class="dropbtn" >Alphabots</a>
+                                <ul class="dropdown-content">
+                                        <li><a id = "robot" class="allbuttons saveLoadTestScenariosBtn" onclick="document.getElementById('id05').style.display='block'" style="text-overflow: ellipsis; white-space: nowrap;">New Alphabot</a></li>
+                                        <li><a id = "About" class="allbuttons saveLoadTestScenariosBtn" onclick="openAbout()">Connect</a></li>
+                                        <li><a id = "control_robot" onclick="document.getElementById('id04').style.display='block'""class="allbuttons saveLoadTestScenariosBtn">Control</a></li>
+
+                                </ul>
+                        </li>
+						
+						
+						
+						                       <li class="dropdown">
+                                <a class="dropbtn" >Buildings</a>
+                                <ul class="dropdown-content">
+                                        <li><a id = "robot" onclick ="Building_Creation(scene,canvas, engine)" class="allbuttons saveLoadTestScenariosBtn"  style="text-overflow: ellipsis; white-space: nowrap;">Add building</a></li>
+                                        <li><a id = "About" class="allbuttons saveLoadTestScenariosBtn" onclick="openAbout()">Delete</a></li>
+                                        <li><a id = "control_robot" class="allbuttons saveLoadTestScenariosBtn">Show Buildings</a></li>
+
+                                </ul>
+                        </li>
+						
+						
+						                  <li class="dropdown">
+                                <a class="dropbtn" >Roads</a>
+                                <ul class="dropdown-content">
+                                        <li><a id="add_road" class="allbuttons saveLoadTestScenariosBtn" >Add Roads</a></li>
+                                        <li><a id = "" class="allbuttons saveLoadTestScenariosBtn" >Delete</a></li>
+                                        <li><a id = "" class="allbuttons saveLoadTestScenariosBtn" >Show Roads</a></li>
+
+                                </ul>
+                        </li>
+						
+						
+						
+						 <li class="dropdown">
+                                <a class="dropbtn" >Traffic Lights</a>
+                                <ul class="dropdown-content">
+                                        <li><a id="add_road" onclick="Traffic_Light_Creating(scene,canvas, engine)" class="allbuttons saveLoadTestScenariosBtn" >Add Traffic Lights</a></li>
+                                        <li><a id = "" class="allbuttons saveLoadTestScenariosBtn" >Delete</a></li>
+                                        <li><a id = "" class="allbuttons saveLoadTestScenariosBtn" >Show Roads</a></li>
+
+                                </ul>
+                        </li>
+						
+						<li class="dropdown">
+                                <a class="dropbtn" >My Accounts</a>
+                                <ul class="dropdown-content">
+                                        <li><a id="" onclick="document.getElementById('id03').style.display='block'"  class="allbuttons saveLoadTestScenariosBtn" >My Profil</a></li>
+                                        <li><a id = "" onclick="" class="allbuttons saveLoadTestScenariosBtn" >My Projects</a></li>
+                                        <li><a id = "" onclick="" href="/logout" class="allbuttons saveLoadTestScenariosBtn" >Logout</a></li>
+
+                                </ul>
+                        </li>
+						
+						
+						
+ <!-- Link to Vissta		
+                     <li class="dropdown">
+                                <a class="dropbtn" >Vista</a>
+							  </li> --> 	
+                </div>  
+        </div>  
+     </div>   
+   
+
+
+    <div id="wrapper">
+        <!------- Left Panel -------->
+        <div id="leftPanel" class="leftPanel" onresize="myFunction()">
+                <div class="bloc-header">
+                        <div id = "leftInner" class="leftInner">
+                               <!-- <div id = "treelistArea" class="treelistArea">-->
+                                       <!-- <p class="alllabels">Test Scenario</p> -->
+
+                                        <div id = "instantiateElements" class="instantiateElements" >
+										<!-- Here I can put new buttons-->
+                                                <button id = "" class="allbuttons toolBarButtons newPathButton" title="New Path"></button>
+                                                <button id = "newCarButton" class="allbuttons  toolBarButtons newCarButton" title="New Car"></button>
+                                                <button id = "actionsButton" class="allbuttons  toolBarButtons actionsButton" title="Actions"></button>
+											
+											
+				
+                                        </div>
+                                       
+                                        <!-- ----- Tree hierarchy Panel -------->
+										
+                                        <ul id="myUL" class="myUL" style=" margin-left: -40px;border:1px solid black;width:1000px;height:400px;overflow:scroll;overflow-y:scroll;overflow-x:hidden;">
+			
+
+		     <li id="Roads">
+		          <span class="box check-box">Roads</span>
+		          <ul id="road_list"class="nested active">
+				  
+
+	            </ul>
+	        </li>
+			
+			
+			     <li id="Alphabots">
+		          <span class="box check-box">Alphabots</span>
+		          <ul id="alphabot_list"class="nested active">
+				  
+
+	            </ul>
+	        </li>
+			
+			
+			<li id="Traffic Lights">
+		          <span class="box check-box">Traffic Lights</span>
+		          <ul id="traffic_light_list"class="nested active">
+				  
+
+	            </ul>
+	        </li>
+			
+			
+			<li id="Itineraries">
+		          <span class="box check-box">Itineraries</span>
+		          <ul id="itineraies_list"class="nested active">
+				  
+
+	            </ul>
+	        </li>
+			
+			
+	
+		 </ul>
+		 
+         
+			
+         
+             
+                        </div>
+                </div>
+
+        </div>
+		
+		
+		
+		
+		
+ 
+        <!------- Middle Panel -------->
+        <div id="middlePanel" class="middlePanel">
+                 <!--Pane For canvas-->     
+             
+                <div id="middlePane" class="middlePane">
+                                <p class="alllabels" style="margin-top: 8px;">Simulation View</p> 
+                                <div class="insidecontainerCanvas">
+								<!-- Canvas will go here -->
+                                <canvas id="renderCanvas"> </canvas>
+                        </div>  
+                </div>
+                <!--Pane For Simulation Controls-->
+                <div id="simulationPane" class="simulationPane">
+                        <!--p class="alllabels">Simulation</p-->
+                        <div class="insidecontainerSimulation">                
+                                <button id = "startSimulation" class="allbuttons startSimButton" title="Start Simulation"></button>
+                                <button id = "stopSimulation" class="allbuttons stopSimButton" title="Stop Simulation"></button>
+                                <input type="range" min="0" max="100" value="0" class="slider" id="timeline" step="1" name = "timeline">
+                                <label for="timeline" id = "time" class="wwwpinformation"  >Time: </label>
+                               
+                        </div>
+                </div>
+        <!--Pane For Console and Tips-->
+                <div id="bottomPane" class="bottomPane" >
+                        <!--Console Pane-->
+                        <div id = "codingArea" class="codingArea">
+                                <p class="alllabels">Scenario Instructions</p>
+                                <div class="insidecontainerCanvas"> </div>
+                                <textarea id = "myCodeArea" ></textarea>
+                               <!--  <div id="consoleLogArea" class="insidecontainerConsole"></div>  -->
+                       
+                        </div>  
+                          <!--Tips Pane -->
+                        <div id="consolePane">
+                                <p class="alllabels">Console</p>
+                                <div id="consoleLogArea" class="insidecontainerConsole"></div>  
+                                 
+                                </div>
+							
+                        </div>   
+                <!--/div-->
+        </div>
+        </div>
+		
+    </div>
+
+</div>
+</div>
+
+
+          <script>
+    canvas = document.getElementById("renderCanvas"); // Get the canvas element 
+    engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
+        var createScene = function () {
+	     scene = new BABYLON.Scene(engine); //Création de la scène
+        var assetsManager = new BABYLON.AssetsManager(scene); //AssetManager permet de charger des modèles OBJ
+        camera = new BABYLON.UniversalCamera("camera", new BABYLON.Vector3(30, 10, 0), scene);
+        camera.setTarget(BABYLON.Vector3.Zero());
+         camera.attachControl(canvas, true);
+       
+	   
+	   
+	   
+	light = new BABYLON.DirectionalLight("DirectionalLight", new BABYLON.Vector3(0, -10, 0), scene);
+  
+    light.specular = new BABYLON.Color3(0,0,0);
+    light.groundColor = new BABYLON.Color3.White();
+    light.intensity = 1;
+	   
+	   
+	   
+	   
+        return scene;	
+        };
+        /******* End of the create scene function ******/    
+        var scene = createScene(); //Call the createScene function
+        // Register a render loop to repeatedly render the scene
+        engine.runRenderLoop(function () { 
+                scene.render();
+        });
+        // Watch for browser/canvas resize events
+        window.addEventListener("resize", function () { 
+                engine.resize();
+        });
+    </script>
+
+	
+ <div id="id01" class="w3-modal">
+    <div class="w3-modal-content w3-animate-zoom">
+      <header class="w3-container w3-teal"> 
+        <span onclick="document.getElementById('id01').style.display='none'" 
+        class="w3-button w3-display-topright">&times;</span>
+        <h2>Scene Manager</h2>
+      </header>
+      <div class="w3-container">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+			<th scope="col">Width</th>
+			<th scope="col">Length</th>
+			<th scope="col">Date Creating</th>
+          </tr>
+        </thead>
+        <tbody id="display_scene">
+        </tbody>
+      </table>
+      </div>
+      <footer class="w3-container w3-teal">
+	   <button onclick="Display_Scene_From_Database();" name="button">Load Scenes</button></br>
+       <button onclick="Delete_Scene_From_Database();" name="button">Delete Scene</button></br>	   
+      </footer>
+    </div>
+  </div>
+  
+  
+  
+  
+  
+   <div id="id02" class="w3-modal">
+    <div class="w3-modal-content w3-animate-zoom">
+      <header class="w3-container w3-teal"> 
+        <span onclick="document.getElementById('id02').style.display='none'" 
+        class="w3-button w3-display-topright">&times;</span>
+        <h2>Create New Project</h2>
+      </header>
+      <div class="w3-container">
+      
+	       
+		  <label>Project Name </label></br>
+            <input type="text" name="name" id ="name" required></br>
+			 <label>Width</label></br>
+            <input type="text" name="width" id="width" required></br>
+			 <label>Length</label></br>
+			<input type="text" name="length" id="length" required></br>
+            <button id="submit_scene" >Create</button>
+	
+	  
+      </div>
+      <footer class="w3-container w3-teal">
+  	 <button onclick="createAstaGround(scene,canvas,engine);" >Or create AstaGround project</button>
+      </footer>
+    </div>
+  </div>
+  
+  <div id="id03" class="w3-modal">
+    <div class="w3-modal-content w3-animate-zoom">
+      <header class="w3-container w3-teal"> 
+        <span onclick="document.getElementById('id03').style.display='none'" 
+        class="w3-button w3-display-topright">&times;</span>
+        <h2>Profil</h2>
+      </header>
+      <div class="w3-container">
+      
+	  <?php
+	     echo"<p><strong>Name : </strong>".$_SESSION['name']."</p></br>";
+		 echo"<p><strong>First Name :</strong> ".$_SESSION['first_name']."</p></br>";
+		 echo"<p><strong>Password :</strong> ".$_SESSION['password']."</p></br>";
+		 echo"<p><strong>Old :</strong> ".$_SESSION['old']."</p></br>";
+		 echo"<p><strong>Password :</strong> ".$_SESSION['password']."</p></br>";
+		 echo"<p><strong>Phone :</strong> ".$_SESSION['Phone']."</p></br>";
+		 echo"<p><strong>Registration date : </strong> ".$_SESSION['registration_date']."</p></br>";
+		 echo"<p><strong>Mail:</strong> ".$_SESSION['mail']."</p></br>";
+		 echo"<p><strong>Account type :</strong> ".$_SESSION['user_kind']."</p></br>";
+		 
+		 ?>
+		
+        </form>
+	  
+      </div>
+      <footer class="w3-container w3-teal">
+  
+      </footer>
+    </div>
+  </div>
+  
+  
+  
+  
+  
+  <div id="id04" class="w3-modal">
+    <div class="w3-modal-content w3-animate-zoom">
+      <header class="w3-container w3-teal"> 
+        <span onclick="document.getElementById('id04').style.display='none'" 
+        class="w3-button w3-display-topright">&times;</span>
+        <h2>Manual robot control</h2>
+      </header>
+      <div class="w3-container">
+      
+	  <table align="center">
+		<tr>
+			<td align="center"><b>Motor Control</b></td>
+		</tr>
+		<tr>
+			<td>
+				<div align="center">
+					<button onclick="Alphabot[1].forward();"  style="font-size:24px "><i class="material-icons">arrow_upward</i></button></br>
+				</div>
+				<div align="center">
+					<button onclick="Alphabot[1].left();" style="font-size:24px"><i class="material-icons">arrow_back</i></button>
+					<button onclick="Alphabot[1].stop();" style="font-size:24px"><i class="material-icons">pause</i></button>
+					<button onclick="Alphabot[1].right();" style="font-size:24px"><i class="material-icons">arrow_forward</i></button></br>
+				</div>
+				<div align="center">
+					<button onclick="Alphabot[1].backward();" style="font-size:24px"><i class="material-icons">arrow_downward</i></button>
+				</div>
+			</td>
+	
+			
+			
+		</tr>
+	</table>
+	  
+      </div>
+      <footer class="w3-container w3-teal">
+  
+      </footer>
+    </div>
+  </div>
+  
+  
+  
+  
+   <div id="id05" class="w3-modal">
+    <div class="w3-modal-content w3-animate-zoom">
+      <header class="w3-container w3-teal"> 
+        <span onclick="document.getElementById('id05').style.display='none'" 
+        class="w3-button w3-display-topright">&times;</span>
+        <h2>Insert New robot : </h2>
+      </header>
+      <div class="w3-container">
+      
+    <label for="robot_name">Name of the Robot</label></br>
+  <input type="text" id="alphabot_name" name="alphabot_name" value=""></br>
+  
+  <label for="ip_addr">IP Addr</label></br>
+  <input type="text" id="ip_addr" name="ip_addr" value=""></br>
+  
+  <label for="port">Port</label></br>
+  <input type="text" id="port_robot" name="port_robot" value=""></br>
+  
+    <label for="initial_x_position">Initial X position</label></br>
+  <input type="text" id="initial_position_x_robot" name="initial_position_x_robot" value=""></br>
+  
+      <label for="initial_z_position">Initial Z position</label></br>
+  <input type="text" id="initial_position_z_robot" name="initial_position_z_robot" value=""></br>
+
+  
+  <button class="button" id="submit_robot" type="submit" id="map">Go</button>
+
+	 
+	  
+      </div>
+      <footer class="w3-container w3-teal">
+  
+      </footer>
+    </div>
+  </div>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  	
+
+
+<div id="control" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close">&times;</span>
+      <h2>Control Robot</h2>
+    </div>
+    <div class="modal-body">   
+        
+		
+		<table align="center">
+		<tr>
+			<td align="center"><b>Motor Control</b></td>
+		</tr>
+		<tr>
+			<td>
+				<div align="center">
+					<button onclick="Alphabot[1].forward();"  style="font-size:24px "><i class="material-icons">arrow_upward</i></button></br>
+				</div>
+				<div align="center">
+					<button onclick="Alphabot[1].left();" style="font-size:24px"><i class="material-icons">arrow_back</i></button>
+					<button onclick="Alphabot[1].stop();" style="font-size:24px"><i class="material-icons">pause</i></button>
+					<button onclick="Alphabot[1].right();" style="font-size:24px"><i class="material-icons">arrow_forward</i></button></br>
+				</div>
+				<div align="center">
+					<button onclick="Alphabot[1].backward();" style="font-size:24px"><i class="material-icons">arrow_downward</i></button>
+				</div>
+			</td>
+			<button onclick="Alphabot[1].up();" style="font-size:24px"><i class="material-icons">More</i></button>
+			<button onclick="Alphabot[1].down();" style="font-size:24px"><i class="material-icons">Less</i></button>
+			
+		</tr>
+	</table>
+    </div>
+    <div class="modal-footer">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
